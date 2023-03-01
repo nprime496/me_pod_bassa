@@ -24,6 +24,25 @@ Remarque:
 Même si cette liste suggère de se concentrer sur une compétence à la fois, il est important de pratiquer régulièrement les différentes compétences de façon incrémentale pour assurer les automatismes plus tard.
 
 
+## Ressources
+
+| Tutoriels                                                                                                  | auteur | type | contenu |
+|------------------------------------------------------------------------------------------------------------|--------|------|---------|
+| [Apprendre le bassa](https://apprendre-le-bassa.blogspot.com/2013/10/liste-vocabulaire-bassa-courant.html) |        |   |         |
+| [Des mots et des langues](http://desmotsetdeslangues.eklablog.com/bassa-a126251388)                        |        |   |         |
+| [Je parle bassa 2.0 facebook](https://www.facebook.com/bassa2.0/?locale=fr_FR)                             |        |    |         |
+| [Je parle bassa 2.0](https://www.youtube.com/@jeparlelebassa2.060)                                         |        |    |         |
+| [Resulam](https://www.youtube.com/@Resulam/videos)                                                         |        |    |         |
+| [Yigui Kids](https://www.youtube.com/@YiguiKids)                                                           |        |    |         |
+| [Parler Bassa'a pour les nuls](https://www.youtube.com/channel/UCo_66Yesms0NOHzdqEOhzUw)                   |        |    |         
+| [Apprenons le bassa](https://www.facebook.com/people/Apprenons-Le-Basaa/100083107603443/)                   |        |           
+| [Rodolphe Nack](https://www.youtube.com/@NAMARO2025/videos)|        |    |         
+|   [Glosbe francais-bassa](https://fr.glosbe.com/fr/bas)
+             |        |    |        
+|                    |        |    |        
+|                    |        |    |        
+
+
 
 ## 1. Sons et alphabet
 Avant de commencer l’étude du vocabulaire ou de la grammaire, il est indispensable d’être à l’aise avec les sons et l’alphabet (dans le cas des langues employant des nouveaux sons ou un nouvel alphabet). Certaines méthodes de langues (Assimil ou Harrap’s) commencent par cela, en proposant des mots basiques qu’on peut lire et écouter.
@@ -71,8 +90,8 @@ Etudiez les mots de bases (en phrases ou seuls (via duolingo par exemple)), cher
 |----------------------------------------------------------------------------------|------|---------|
 | [Se présenter en Bassa](https://www.youtube.com/watch?v=3KkrQ5IHFgs&ab_channel=Jeparlelebassa2.0) |   |         |
 | [Les FORMULES de POLITESSE en BASSA ?](https://www.youtube.com/watch?v=6HJvrE_NWcI&ab_channel=Parlerbassapourlesnuls)       |   |         |
-|                                                                                  |    |         |
-
+|                                                                                 |    |     |
+|                                                                                  |    |     |
 
 
 
@@ -146,19 +165,6 @@ Entre temps, lisez des trucs faciles, et augmentez la difficulté petit à petit
 Finalement, une fois que l’audition est (très) bonne et qu’on commence à comprendre sans trop de difficultés (95% de ce qu’on entend), on peut passer à la dernière étape, la plus importante : activer l’oral pour ne plus jamais le perdre. Se mettre à n’employer QUE la langue cible lorsque vous pensez (ou parlez tout seul). Si vous le faites correctement, en l’espace de quelques jours seulement (bien que la durée pour cette étape soit relative), vous pourrez parler dans la langue sans difficultés, avec un niveau intermédiaire. Vous pouvez alors parler avec des natifs sans trop de difficultés.
 
  
-
-## Ressources
-
-| Tutoriels                                                                                                  | auteur | type | contenu |
-|------------------------------------------------------------------------------------------------------------|--------|------|---------|
-| [Apprendre le bassa](https://apprendre-le-bassa.blogspot.com/2013/10/liste-vocabulaire-bassa-courant.html) |        |   |         |
-| [Des mots et des langues](http://desmotsetdeslangues.eklablog.com/bassa-a126251388)                        |        |   |         |
-| [Je parle bassa 2.0 facebook](https://www.facebook.com/bassa2.0/?locale=fr_FR)                             |        |    |         |
-| [Je parle bassa 2.0](https://www.youtube.com/@jeparlelebassa2.060)                                         |        |    |         |
-| [Resulam](https://www.youtube.com/@Resulam/videos)                                                         |        |    |         |
-| [Yigui Kids](https://www.youtube.com/@YiguiKids)                                                           |        |    |         |
-| [Parler Bassa'a pour les nuls](https://www.youtube.com/channel/UCo_66Yesms0NOHzdqEOhzUw)                   |        |    |         
-| [Apprenons le bassa](https://www.facebook.com/people/Apprenons-Le-Basaa/100083107603443/)                   |        |    |         |
 
 
 
