@@ -6,7 +6,7 @@
 
 ## Préface
 
-Ce document est un mini-tutoriel que j'ai créé pour m'aider à apprendre le bassa'a en utilisant des références trouvées sur internet. Nous suivrons une méthodologie inspirée de [caméleon des langues](http://cameleondeslangues.be/etapes-apprendre-langue-de-0/) qui fournit des étapes d'apprentissage et des conseils pratiques utiles pour chaque module. Nous allons ainsi collecter des sources sur Internet pour chaque module afin de fournir les ressources pour chaque module.
+Ce document est un mini-tutoriel que j'ai créé pour m'aider à apprendre le bassa'a en utilisant des références trouvées sur internet. Nous suivrons une méthodologie inspirée de [caméleon des langues](http://cameleondeslangues.be/etapes-apprendre-langue-de-0/) qui fournit des étapes d'apprentissage et des conseils pratiques utiles pour chaque module. Nous allons ainsi collecter des sources sur Internet pour chaque module afin de fournir les ressources utiles.
 
 :)
 
