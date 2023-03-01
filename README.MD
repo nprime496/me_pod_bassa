@@ -21,7 +21,7 @@ Il est important de trouver les documents et les sources d'étude complémentair
 
 Remarque:
 
-Même si cette liste suggère de se concentrer sur une compétence à la fois, il est important de pratiquer régulièrement les quatre compétences en commençant par les compétences passives pour assurer les automatismes plus tard.
+Même si cette liste suggère de se concentrer sur une compétence à la fois, il est important de pratiquer régulièrement les différentes compétences de façon incrémentale pour assurer les automatismes plus tard.
 
 
 
