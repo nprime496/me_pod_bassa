@@ -35,12 +35,10 @@ Même si cette liste suggère de se concentrer sur une compétence à la fois, i
 | [Resulam](https://www.youtube.com/@Resulam/videos)                                                         |        |    |         |
 | [Yigui Kids](https://www.youtube.com/@YiguiKids)                                                           |        |    |         |
 | [Parler Bassa'a pour les nuls](https://www.youtube.com/channel/UCo_66Yesms0NOHzdqEOhzUw)                   |        |    |         
-| [Apprenons le bassa](https://www.facebook.com/people/Apprenons-Le-Basaa/100083107603443/)                   |        |           
-| [Rodolphe Nack](https://www.youtube.com/@NAMARO2025/videos)|        |    |         
-|   [Glosbe francais-bassa](https://fr.glosbe.com/fr/bas)
-             |        |    |        
-|                    |        |    |        
-|                    |        |    |        
+| [Apprenons le bassa](https://www.facebook.com/people/Apprenons-Le-Basaa/100083107603443/)                   |        |      |     
+| [Rodolphe Nack](https://www.youtube.com/@NAMARO2025/videos)|        |    |         |
+|   [Glosbe francais-bassa](https://fr.glosbe.com/fr/bas)   |        |       |  |
+|                    |        |    |        |
 
 
 
