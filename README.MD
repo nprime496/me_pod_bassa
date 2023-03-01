@@ -1,7 +1,7 @@
 # BASSA
 
 
-### [Junior N'nane](https://twiiter.com/nprime496)
+### [Junior N'nane](https://twitter.com/nprime496)
 
 
 ## Préface
