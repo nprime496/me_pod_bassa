@@ -38,7 +38,10 @@ Même si cette liste suggère de se concentrer sur une compétence à la fois, i
 | [Apprenons le bassa](https://www.facebook.com/people/Apprenons-Le-Basaa/100083107603443/)                   |        |      |     
 | [Rodolphe Nack](https://www.youtube.com/@NAMARO2025/videos)|        |    |         |
 |   [Glosbe francais-bassa](https://fr.glosbe.com/fr/bas)   |        |       |  |
+|     [Dictionnaire français-Bassa : PlayStore](https://play.google.com/store/apps/details?id=org.sena.dico.bassa&hl=fr&gl=US&pli=1)               |        |    |        |
 |                    |        |    |        |
+|                    |        |    |        |
+
 
 
 
