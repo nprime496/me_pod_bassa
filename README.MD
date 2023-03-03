@@ -32,13 +32,14 @@ Même si cette liste suggère de se concentrer sur une compétence à la fois, i
 | [Des mots et des langues](http://desmotsetdeslangues.eklablog.com/bassa-a126251388)                        |        |   |         |
 | [Je parle bassa 2.0 facebook](https://www.facebook.com/bassa2.0/?locale=fr_FR)                             |        |    |         |
 | [Je parle bassa 2.0](https://www.youtube.com/@jeparlelebassa2.060)                                         |        |    |         |
-| [Resulam](https://www.youtube.com/@Resulam/videos)                                                         |        |    |         |
-| [Yigui Kids](https://www.youtube.com/@YiguiKids)                                                           |        |    |         |
 | [Parler Bassa'a pour les nuls](https://www.youtube.com/channel/UCo_66Yesms0NOHzdqEOhzUw)                   |        |    |         
 | [Apprenons le bassa](https://www.facebook.com/people/Apprenons-Le-Basaa/100083107603443/)                   |        |      |     
 | [Rodolphe Nack](https://www.youtube.com/@NAMARO2025/videos)|        |    |         |
 |   [Glosbe francais-bassa](https://fr.glosbe.com/fr/bas)   |        |       |  |
 |     [Dictionnaire français-Bassa : PlayStore](https://play.google.com/store/apps/details?id=org.sena.dico.bassa&hl=fr&gl=US&pli=1)               |        |    |        |
+|   [Metchoup Formation](https://www.youtube.com/@metchouplearning/videos)                 |        |    |        |
+| [Resulam](https://www.youtube.com/@Resulam/videos)                                                         |        |    |         |
+| [Yigui Kids](https://www.youtube.com/@YiguiKids)                                                      |        |    |         |
 |                    |        |    |        |
 |                    |        |    |        |
 
