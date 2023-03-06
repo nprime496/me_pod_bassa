@@ -1,12 +1,13 @@
 from PIL import Image
 from io import BytesIO
 import requests
-import random
+import random 
 import string
 from google_images_search import GoogleImagesSearch
 import streamlit as st
 import pandas as pd
 from PIL import UnidentifiedImageError
+import os
 
 # # Set page title and description
 # st.set_page_config(page_title="MCQ de traduction français-bassa",
@@ -19,58 +20,63 @@ def generate_random_string(length):
     Generate a random string of the specified length.
     """
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(length))
-
+    return "".join(random.choice(letters) for i in range(length))
 
 
 @st.cache_resource
 def read_csv(filename):
     return pd.read_csv(filename)
+
+
 # you can provide API key and CX using arguments,
 # or you can set environment variables: GCS_DEVELOPER_KEY, GCS_CX
 
-API_KEY='AIzaSyDgrXS9umkuifnOsbRZb261-st_OAy75C0'
-CX='42913d29d2cf140f2'
+API_KEY = os.environ["API_KEY"]
+CX = os.environ["CX"]
 
+ 
 @st.cache_resource
 def get_gis():
-    return GoogleImagesSearch(API_KEY,CX)
+    return GoogleImagesSearch(API_KEY, CX)
 
-DATABASE = read_csv('./db.csv')
+
+DATABASE = read_csv("./db.csv")
 print(DATABASE.head())
 GIS_API = get_gis()
 
+
 # Define a function to retrieve the image urls for a given query
 @st.cache_data
-def get_image_urls(query,num_imgs=4):
+def get_image_urls(query, num_imgs=4):
     # define search params
     # option for commonly used search param are shown below for easy reference.
     # For param marked with '##':
     #   - Multiselect is currently not feasible. Choose ONE option only
     #   - This param can also be omitted from _search_params if you do not wish to define any value
-    print("\""*40)
+    print('"' * 40)
     print(f" {query}")
-    print("\""*40)
+    print('"' * 40)
     _search_params = {
-        'q': "une photo montrant "+query,
-        'num': num_imgs,
-        'fileType': 'png',
+        "q": "une photo montrant " + query,
+        "num": num_imgs,
+        "fileType": "png",
         #'rights': 'cc_publicdomain|cc_attribute|cc_sharealike|cc_noncommercial|cc_nonderived',
-        'safe': 'active', ## |high|medium|off|safeUndefined
-        'imgType': 'photo', ## 'clipart|face|lineart|stock|photo|animated|imgTypeUndefined
-        'lang':'fr',
-        'imgSize': 'medium', ## |small|xlarge|xxlarge|imgSizeUndefined
+        "safe": "active",  ## |high|medium|off|safeUndefined
+        "imgType": "photo",  ## 'clipart|face|lineart|stock|photo|animated|imgTypeUndefined
+        "lang": "fr",
+        "imgSize": "medium",  ## |small|xlarge|xxlarge|imgSizeUndefined
         #'imgDominantColor': '', ##black|blue|brown|gray|green|orange|pink|purple|red|teal|white|yellow|imgDominantColorUndefined
         #'imgColorType': 'color|gray|mono|trans|imgColorTypeUndefined' ##
     }
 
     # this will search, download and resize:
-    GIS_API.search(search_params=_search_params, width=250, height=500)#path_to_dir='/path/'
+    GIS_API.search(
+        search_params=_search_params, width=250, height=500
+    )  # path_to_dir='/path/'
 
-    results =  [image.url for image in GIS_API.results() ]
-    #assert(len(results)==num_imgs),f"Retrieved {len(results)} is different form {num_imgs}"
+    results = [image.url for image in GIS_API.results()]
+    # assert(len(results)==num_imgs),f"Retrieved {len(results)} is different form {num_imgs}"
     return results
-
 
 
 def write_question():
@@ -83,8 +89,8 @@ def write_question():
     """
     selected = DATABASE.sample()
 
-    selected_bassa = selected['bassa'].values[0]
-    selected_fr = selected['traduction'].values[0]
+    selected_bassa = selected["bassa"].values[0]
+    selected_fr = selected["traduction"].values[0]
     # Define the correct answer to the MCQ
     correct_ = selected_bassa
 
@@ -92,11 +98,15 @@ def write_question():
     query = selected_fr
 
     # Set up the Google Images API
-    urls  = get_image_urls(query)
+    urls = get_image_urls(query)
     print(urls)
-    propositions = [selected_bassa,*random.sample(set(DATABASE['bassa'])-{selected_bassa},3)]
+    propositions = [
+        selected_bassa,
+        *random.sample(set(DATABASE["bassa"]) - {selected_bassa}, 3),
+    ]
     random.shuffle(propositions)
-    return urls,correct_,selected_fr,propositions
+    return urls, correct_, selected_fr, propositions
+
 
 @st.cache_data
 def get_images(img_urls):
@@ -105,17 +115,26 @@ def get_images(img_urls):
         try:
             imgs_.append(Image.open(BytesIO(requests.get(url).content)))
         except UnidentifiedImageError:
-            imgs_.append(Image.open(BytesIO(requests.get('https://data.pixiz.com/output/user/frame/preview/400x400/7/8/0/3/1863087_a0870.jpg').content)))
+            imgs_.append(
+                Image.open(
+                    BytesIO(
+                        requests.get(
+                            "https://data.pixiz.com/output/user/frame/preview/400x400/7/8/0/3/1863087_a0870.jpg"
+                        ).content
+                    )
+                )
+            )
     return imgs_
 
-def display_question(img_urls,correct,traduction,choices,container=st):
-    print(img_urls,correct,traduction,choices)
-    if img_urls==None or correct==None or traduction==None or choices==None:
+
+def display_question(img_urls, correct, traduction, choices, container=st):
+    print(img_urls, correct, traduction, choices)
+    if img_urls == None or correct == None or traduction == None or choices == None:
         return
-    
+
     st.title(traduction)
 
-    mygrid = [[],[]]
+    mygrid = [[], []]
     with st.container():
         mygrid[0] = st.columns(2)
     with st.container():
@@ -126,13 +145,14 @@ def display_question(img_urls,correct,traduction,choices,container=st):
         for j in range(2):
             with mygrid[i][j]:
                 try:
-                    st.image(imgs[i*2+j], width=150)
+                    st.image(imgs[i * 2 + j], width=150)
                 except IndexError:
                     pass
 
-
     # Display the question and radio buttons
-    answer = st.radio(f'Quelle est la traduction correcte pour : {traduction} ?', choices)
+    answer = st.radio(
+        f"Quelle est la traduction correcte pour : {traduction} ?", choices
+    )
 
     style = """
         <style>
@@ -150,16 +170,13 @@ def display_question(img_urls,correct,traduction,choices,container=st):
     # Check if the answer is correct and display a message
     submit = st.button("Soumettre")
     if submit:
-        if answer==correct:
-            st.write('Correct!')
+        if answer == correct:
+            st.write("Correct!")
         else:
-            st.write(f'Faux. La bonne réponse est [{correct}].')
-    
+            st.write(f"Faux. La bonne réponse est [{correct}].")
 
-   
     # if st.button('Prochaine Question'):
     #     write_question()
-
 
 
 # Define the Streamlit app
@@ -177,29 +194,34 @@ def main():
     # # Add start button
     st.markdown("<style>body { font-size: 45px; }</style>", unsafe_allow_html=True)
 
-    if 'image_urls' not in st.session_state:
+    if "image_urls" not in st.session_state:
         st.session_state.image_urls = None
-    if 'correct_answer' not in st.session_state:
+    if "correct_answer" not in st.session_state:
         st.session_state.correct_answer = None
 
-    if 'correct_question' not in st.session_state:
+    if "correct_question" not in st.session_state:
         st.session_state.correct_question = None
-    if 'answer_choices' not in st.session_state:
+    if "answer_choices" not in st.session_state:
         st.session_state.answer_choices = None
 
     if st.button("Nouvelle question"):
-        st.session_state.image_urls,st.session_state.correct_answer,st.session_state.correct_question,st.session_state.answer_choices = write_question()
-    #image_urls,correct_answer,correct_question,answer_choices = None,None,None,None
-    display_question(st.session_state.image_urls,st.session_state.correct_answer,st.session_state.correct_question,st.session_state.answer_choices)
+        (
+            st.session_state.image_urls,
+            st.session_state.correct_answer,
+            st.session_state.correct_question,
+            st.session_state.answer_choices,
+        ) = write_question()
+    # image_urls,correct_answer,correct_question,answer_choices = None,None,None,None
+    display_question(
+        st.session_state.image_urls,
+        st.session_state.correct_answer,
+        st.session_state.correct_question,
+        st.session_state.answer_choices,
+    )
 
-  
-        #display_question(image_urls,correct_answer,correct_question,answer_choices)
+    # display_question(image_urls,correct_answer,correct_question,answer_choices)
+
 
 # Run the Streamlit app
 if __name__ == "__main__":
     main()
-
-
-
-
-

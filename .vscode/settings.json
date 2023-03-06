@@ -1,0 +1,4 @@
+{
+    "python.linting.mypyPath": "./env/mypy",
+    "python.analysis.typeCheckingMode": "basic"
+}
