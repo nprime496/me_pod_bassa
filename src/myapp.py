@@ -3,7 +3,7 @@ from io import BytesIO
 import requests
 import random 
 import string
-from google_images_search import GoogleImagesSearch
+#from google_images_search import GoogleImagesSearch
 import streamlit as st
 import pandas as pd
 from PIL import UnidentifiedImageError
@@ -27,22 +27,34 @@ def generate_random_string(length):
 def read_csv(filename):
     return pd.read_csv(filename)
 
+import requests
+import random
+import json
+from urllib import parse, request
 
+# Set up the Giphy API endpoint URL and API key
+#url = "https://api.giphy.com/v1/gifs/random"
+api_key = "84bmfZ2ikWZtAIIOmonHR31OFBEKJ90W"
+
+url = "http://api.giphy.com/v1/gifs/search"
+
+
+#print(json.dumps(data, sort_keys=True, indent=4))
 # you can provide API key and CX using arguments,
 # or you can set environment variables: GCS_DEVELOPER_KEY, GCS_CX
 
-API_KEY = os.environ["API_KEY"]
-CX = os.environ["CX"]
 
- 
-@st.cache_resource
-def get_gis():
-    return GoogleImagesSearch(API_KEY, CX)
+import streamlit as st
+
+
+# @st.cache_resource
+# def get_gis():
+#     return GoogleImagesSearch(API_KEY, CX)
 
 
 DATABASE = read_csv("./db.csv")
 print(DATABASE.head())
-GIS_API = get_gis()
+#GIS_API = get_gis()
 
 
 # Define a function to retrieve the image urls for a given query
@@ -53,30 +65,40 @@ def get_image_urls(query, num_imgs=4):
     # For param marked with '##':
     #   - Multiselect is currently not feasible. Choose ONE option only
     #   - This param can also be omitted from _search_params if you do not wish to define any value
-    print('"' * 40)
-    print(f" {query}")
-    print('"' * 40)
-    _search_params = {
-        "q": "une photo montrant " + query,
-        "num": num_imgs,
-        "fileType": "png",
-        #'rights': 'cc_publicdomain|cc_attribute|cc_sharealike|cc_noncommercial|cc_nonderived',
-        "safe": "active",  ## |high|medium|off|safeUndefined
-        "imgType": "photo",  ## 'clipart|face|lineart|stock|photo|animated|imgTypeUndefined
-        "lang": "fr",
-        "imgSize": "medium",  ## |small|xlarge|xxlarge|imgSizeUndefined
-        #'imgDominantColor': '', ##black|blue|brown|gray|green|orange|pink|purple|red|teal|white|yellow|imgDominantColorUndefined
-        #'imgColorType': 'color|gray|mono|trans|imgColorTypeUndefined' ##
-    }
+    # print('"' * 40)
+    # print(f" {query}")
+    # print('"' * 40)
+    # _search_params = {
+    #     "q": "une photo montrant " + query,
+    #     "num": num_imgs,
+    #     "fileType": "png",
+    #     #'rights': 'cc_publicdomain|cc_attribute|cc_sharealike|cc_noncommercial|cc_nonderived',
+    #     "safe": "active",  ## |high|medium|off|safeUndefined
+    #     "imgType": "photo",  ## 'clipart|face|lineart|stock|photo|animated|imgTypeUndefined
+    #     "lang": "fr",
+    #     "imgSize": "medium",  ## |small|xlarge|xxlarge|imgSizeUndefined
+    #     #'imgDominantColor': '', ##black|blue|brown|gray|green|orange|pink|purple|red|teal|white|yellow|imgDominantColorUndefined
+    #     #'imgColorType': 'color|gray|mono|trans|imgColorTypeUndefined' ##
+    # }
 
-    # this will search, download and resize:
-    GIS_API.search(
-        search_params=_search_params, width=250, height=500
-    )  # path_to_dir='/path/'
+    # # this will search, download and resize:
+    # GIS_API.search(
+    #     search_params=_search_params, width=250, height=500
+    # )  # path_to_dir='/path/'
 
-    results = [image.url for image in GIS_API.results()]
-    # assert(len(results)==num_imgs),f"Retrieved {len(results)} is different form {num_imgs}"
-    return results
+    # results = [image.url for image in GIS_API.results()]
+    # # assert(len(results)==num_imgs),f"Retrieved {len(results)} is different form {num_imgs}"
+    # return results
+    params = parse.urlencode({
+    "q": query,
+    "api_key": api_key,
+    "limit": "2"
+    })
+
+    with request.urlopen("".join((url, "?", params))) as response:
+        data = json.loads(response.read())
+        url_ = data['data'][0]['images']['original']['url']
+    return url_.split('?')[0]
 
 
 def write_question():
@@ -108,46 +130,47 @@ def write_question():
     return urls, correct_, selected_fr, propositions
 
 
-@st.cache_data
-def get_images(img_urls):
-    imgs_ = []
-    for url in img_urls:
-        try:
-            imgs_.append(Image.open(BytesIO(requests.get(url).content)))
-        except UnidentifiedImageError:
-            imgs_.append(
-                Image.open(
-                    BytesIO(
-                        requests.get(
-                            "https://data.pixiz.com/output/user/frame/preview/400x400/7/8/0/3/1863087_a0870.jpg"
-                        ).content
-                    )
-                )
-            )
-    return imgs_
+# @st.cache_data
+# def get_images(img_urls):
+#     imgs_ = []
+#     for url in img_urls:
+#         try:
+#             imgs_.append(Image.open(BytesIO(requests.get(url).content)))
+#         except UnidentifiedImageError:
+#             imgs_.append(
+#                 Image.open(
+#                     BytesIO(
+#                         requests.get(
+#                             "https://data.pixiz.com/output/user/frame/preview/400x400/7/8/0/3/1863087_a0870.jpg"
+#                         ).content
+#                     )
+#                 )
+#             )
+#     return imgs_
 
 
-def display_question(img_urls, correct, traduction, choices, container=st):
-    print(img_urls, correct, traduction, choices)
-    if img_urls == None or correct == None or traduction == None or choices == None:
+def display_question(img_url, correct, traduction, choices, container=st):
+    print(img_url, correct, traduction, choices)
+    if img_url == None or correct == None or traduction == None or choices == None:
         return
 
     st.title(traduction)
-
-    mygrid = [[], []]
-    with st.container():
-        mygrid[0] = st.columns(2)
-    with st.container():
-        mygrid[1] = st.columns(2)
+    st.markdown(f"![Alt Text]({img_url})")
+ 
+    # mygrid = [[], []]
+    # with st.container():
+    #     mygrid[0] = st.columns(2)
+    # with st.container():
+    #     mygrid[1] = st.columns(2)
     # Display the images in a 4 image one word style
-    imgs = get_images(tuple(img_urls))
-    for i in range(2):
-        for j in range(2):
-            with mygrid[i][j]:
-                try:
-                    st.image(imgs[i * 2 + j], width=150)
-                except IndexError:
-                    pass
+    # imgs = get_images(tuple(img_urls))
+    # for i in range(2):
+    #     for j in range(2):
+    #         with mygrid[i][j]:
+    #             try:
+    #                 st.image(imgs[i * 2 + j], width=150)
+    #             except IndexError:
+    #                 pass
 
     # Display the question and radio buttons
     answer = st.radio(
