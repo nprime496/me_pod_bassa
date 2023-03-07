@@ -229,13 +229,7 @@ def main():
     if "answer_choices" not in st.session_state:
         st.session_state.answer_choices = None
 
-    if st.button("Nouvelle question"):
-        (
-            st.session_state.image_urls,
-            st.session_state.correct_answer,
-            st.session_state.correct_question,
-            st.session_state.answer_choices,
-        ) = write_question()
+
     # image_urls,correct_answer,correct_question,answer_choices = None,None,None,None
     display_question(
         st.session_state.image_urls,
@@ -243,6 +237,14 @@ def main():
         st.session_state.correct_question,
         st.session_state.answer_choices,
     )
+
+    if st.button("Nouvelle question"):
+        (
+            st.session_state.image_urls,
+            st.session_state.correct_answer,
+            st.session_state.correct_question,
+            st.session_state.answer_choices,
+        ) = write_question()
 
     # display_question(image_urls,correct_answer,correct_question,answer_choices)
 
