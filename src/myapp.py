@@ -9,6 +9,8 @@ import pandas as pd
 from PIL import UnidentifiedImageError
 import os
 
+
+
 # # Set page title and description
 # st.set_page_config(page_title="MCQ de traduction français-bassa",
 #                    page_icon=":books:",
@@ -34,7 +36,6 @@ from urllib import parse, request
 
 # Set up the Giphy API endpoint URL and API key
 #url = "https://api.giphy.com/v1/gifs/random"
-api_key = "84bmfZ2ikWZtAIIOmonHR31OFBEKJ90W"
 
 url = "http://api.giphy.com/v1/gifs/search"
 
@@ -89,9 +90,10 @@ def get_image_urls(query, num_imgs=4):
     # results = [image.url for image in GIS_API.results()]
     # # assert(len(results)==num_imgs),f"Retrieved {len(results)} is different form {num_imgs}"
     # return results
+    
     params = parse.urlencode({
     "q": query,
-    "api_key": api_key,
+    "api_key": st.secrets['api_key'],
     "limit": "2"
     })
 
