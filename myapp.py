@@ -11,6 +11,8 @@ import streamlit as st
 #                    page_icon=":books:",
 #                    layout="wide")
 
+widget_id = (id for id in range(1, 100_00))
+
 
 @st.cache_resource
 def read_csv(filename: str) -> pd.DataFrame:
@@ -22,12 +24,34 @@ URL_API = "http://api.giphy.com/v1/gifs/search"
 DATABASE_FILE = "data/db.csv"
 
 DATABASE = read_csv(DATABASE_FILE)
-print(DATABASE.head())
 
 
 # Define a function to retrieve the image urls for a given query
 @st.cache_data
 def get_image_url(query: str) -> str:
+    determinants = [
+        "le",
+        "la",
+        "les",
+        "un",
+        "une",
+        "des",
+        "du",
+        "de",
+        "ce",
+        "cet",
+        "cette",
+        "ces",
+    ]
+    if len(query.split(" ")) > 1:
+        query = [word for word in query.split(" ") if word.lower() not in determinants][
+            0
+        ]
+        # Take into account 'apostrophe'
+    if query[:2] == "l'":
+        query = query[2:]
+
+    print("query ===========", query)
     params = parse.urlencode(
         {
             "q": query,
@@ -67,7 +91,6 @@ def write_question() -> Iterable:
 
     # Set up the Google Images API
     urls = get_image_url(query)
-    print(urls)
     propositions = [
         selected_bassa,
         *random.sample(set(DATABASE["bassa"]) - {selected_bassa}, 3),
@@ -79,6 +102,7 @@ def write_question() -> Iterable:
 def display_question(
     img_url: str, correct: str, traduction: str, choices: Iterable[str]
 ) -> Any:
+    global widget_id
     if not (
         img_url is None or correct is None or traduction is None or choices is None
     ):
@@ -98,6 +122,7 @@ def display_question(
                 answer = st.radio(
                     f"Quelle est la traduction correcte pour : {traduction} ?",
                     choices,
+                    key=next(widget_id),
                 )
 
                 # style = """
@@ -185,8 +210,6 @@ def main() -> None:
                 st.session_state.correct_question,
                 st.session_state.answer_choices,
             )
-
-        print(st.session_state.image_urls)
 
 
 # Run the Streamlit app
