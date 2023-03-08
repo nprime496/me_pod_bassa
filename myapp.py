@@ -100,30 +100,35 @@ def display_question(
                     choices,
                 )
 
-                style = """
-                    <style>
-                        div[data-baseweb="radio"] label {
-                            font-size: 50px !important;
-                        }
-                                body {
-                        font-size: 70px;
-                    }
+                # style = """
+                #     <style>
+                #         div[data-baseweb="radio"] label {
+                #             font-size: 50px !important;
+                #         }
+                #                 body {
+                #         font-size: 70px;
+                #     }
 
-                    </style>
-                """
+                #     </style>
+                # """
 
-                st.markdown(style, unsafe_allow_html=True)
+                # st.markdown(style, unsafe_allow_html=True)
                 # Check if the answer is correct and display a message
-                submit = st.button("Valider")
+                submit = st.button(
+                    f'Valider la traduction de "{traduction}"'
+                )  # Very Important not to have duplicates
                 if submit:
                     if answer == correct:
                         st.write(
                             '<p style="color:green; font-size: 40px;">Correct!</p>',
                             unsafe_allow_html=True,
                         )
-                        st.write("Correct!")
+                        # st.write("Correct!")
                     else:
-                        st.write(f"Faux. La bonne réponse est [{correct}].")
+                        st.write(
+                            f'<span style="color:red; font-size: 25px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 20px;">{correct}.</span>',
+                            unsafe_allow_html=True,
+                        )
         return container
 
 
@@ -153,9 +158,17 @@ def main() -> None:
         st.session_state.answer_choices = None
 
     question = st.empty()
-    nextq = st.button("Nouvelle question")
-    
-    
+    with question:
+        display_question(
+            st.session_state.image_urls,
+            st.session_state.correct_answer,
+            st.session_state.correct_question,
+            st.session_state.answer_choices,
+        )
+
+    _, col2 = st.columns(2)
+    with col2:
+        nextq = st.button("Nouvelle question")
 
     if nextq:
         (
@@ -164,14 +177,16 @@ def main() -> None:
             st.session_state.correct_question,
             st.session_state.answer_choices,
         ) = write_question()
-        question.write(display_question(
-        st.session_state.image_urls,
-        st.session_state.correct_answer,
-        st.session_state.correct_question,
-        st.session_state.answer_choices,
-    ))
-        print(st.session_state.image_urls)
+        question.empty()
+        with question:
+            display_question(
+                st.session_state.image_urls,
+                st.session_state.correct_answer,
+                st.session_state.correct_question,
+                st.session_state.answer_choices,
+            )
 
+        print(st.session_state.image_urls)
 
 
 # Run the Streamlit app
