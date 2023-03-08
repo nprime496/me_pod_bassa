@@ -1,4 +1,4 @@
-env/*
-.*
+.venv/*
+.vscode/*
+.streamlit/secrets.toml
 !.gitignore
-!.streamlit/config.toml
