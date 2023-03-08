@@ -82,46 +82,49 @@ def display_question(
     if not (
         img_url is None or correct is None or traduction is None or choices is None
     ):
-        st.title(traduction)
-        col1, col2 = st.columns(2)
+        container = st.container()
+        with container:
+            st.title(traduction)
+            col1, col2 = st.columns(2)
 
-        gif_tag = f'<img src="{img_url}" alt="GIF" width="300" height="200">'
+            gif_tag = f'<img src="{img_url}" alt="GIF" width="300" height="200">'
 
-        # Show the GIF in the Streamlit app using st.markdown
-        col1.markdown(gif_tag, unsafe_allow_html=True)
-        # col1.markdown(f"![Alt Text]({img_url})")
+            # Show the GIF in the Streamlit app using st.markdown
+            col1.markdown(gif_tag, unsafe_allow_html=True)
+            # col1.markdown(f"![Alt Text]({img_url})")
 
-        with col2:
-            # Display the question and radio buttons
-            answer = st.radio(
-                f"Quelle est la traduction correcte pour : {traduction} ?",
-                choices,
-            )
+            with col2:
+                # Display the question and radio buttons
+                answer = st.radio(
+                    f"Quelle est la traduction correcte pour : {traduction} ?",
+                    choices,
+                )
 
-            style = """
-                <style>
-                    div[data-baseweb="radio"] label {
-                        font-size: 50px !important;
+                style = """
+                    <style>
+                        div[data-baseweb="radio"] label {
+                            font-size: 50px !important;
+                        }
+                                body {
+                        font-size: 70px;
                     }
-                            body {
-                    font-size: 70px;
-                }
 
-                </style>
-            """
+                    </style>
+                """
 
-            st.markdown(style, unsafe_allow_html=True)
-            # Check if the answer is correct and display a message
-            submit = st.button("Valider")
-            if submit:
-                if answer == correct:
-                    st.write(
-                        '<p style="color:green; font-size: 40px;">Correct!</p>',
-                        unsafe_allow_html=True,
-                    )
-                    st.write("Correct!")
-                else:
-                    st.write(f"Faux. La bonne réponse est [{correct}].")
+                st.markdown(style, unsafe_allow_html=True)
+                # Check if the answer is correct and display a message
+                submit = st.button("Valider")
+                if submit:
+                    if answer == correct:
+                        st.write(
+                            '<p style="color:green; font-size: 40px;">Correct!</p>',
+                            unsafe_allow_html=True,
+                        )
+                        st.write("Correct!")
+                    else:
+                        st.write(f"Faux. La bonne réponse est [{correct}].")
+        return container
 
 
 # Define the Streamlit app
@@ -149,7 +152,11 @@ def main() -> None:
     if "answer_choices" not in st.session_state:
         st.session_state.answer_choices = None
 
+    question = st.empty()
     nextq = st.button("Nouvelle question")
+    
+    
+
     if nextq:
         (
             st.session_state.image_urls,
@@ -157,14 +164,14 @@ def main() -> None:
             st.session_state.correct_question,
             st.session_state.answer_choices,
         ) = write_question()
-        print(st.session_state.image_urls)
-
-    display_question(
+        question.write(display_question(
         st.session_state.image_urls,
         st.session_state.correct_answer,
         st.session_state.correct_question,
         st.session_state.answer_choices,
-    )
+    ))
+        print(st.session_state.image_urls)
+
 
 
 # Run the Streamlit app
