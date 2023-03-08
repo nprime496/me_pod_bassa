@@ -1,15 +1,10 @@
-from PIL import Image
-from io import BytesIO
-import requests
-import random 
-import string
-#from google_images_search import GoogleImagesSearch
-import streamlit as st
+import json
+import random
+from typing import Any, Iterable
+from urllib import parse, request
+
 import pandas as pd
-from PIL import UnidentifiedImageError
-import os
-
-
+import streamlit as st
 
 # # Set page title and description
 # st.set_page_config(page_title="MCQ de traduction français-bassa",
@@ -17,93 +12,42 @@ import os
 #                    layout="wide")
 
 
-def generate_random_string(length):
-    """
-    Generate a random string of the specified length.
-    """
-    letters = string.ascii_lowercase
-    return "".join(random.choice(letters) for i in range(length))
-
-
 @st.cache_resource
-def read_csv(filename):
+def read_csv(filename: str) -> pd.DataFrame:
     return pd.read_csv(filename)
 
-import requests
-import random
-import json
-from urllib import parse, request
 
 # Set up the Giphy API endpoint URL and API key
-#url = "https://api.giphy.com/v1/gifs/random"
+URL_API = "http://api.giphy.com/v1/gifs/search"
+DATABASE_FILE = "data/db.csv"
 
-url = "http://api.giphy.com/v1/gifs/search"
-
-
-#print(json.dumps(data, sort_keys=True, indent=4))
-# you can provide API key and CX using arguments,
-# or you can set environment variables: GCS_DEVELOPER_KEY, GCS_CX
-
-
-import streamlit as st
-
-
-# @st.cache_resource
-# def get_gis():
-#     return GoogleImagesSearch(API_KEY, CX)
-
-
-DATABASE = read_csv("src/db.csv")
+DATABASE = read_csv(DATABASE_FILE)
 print(DATABASE.head())
-#GIS_API = get_gis()
 
 
 # Define a function to retrieve the image urls for a given query
 @st.cache_data
-def get_image_urls(query, num_imgs=4):
-    # define search params
-    # option for commonly used search param are shown below for easy reference.
-    # For param marked with '##':
-    #   - Multiselect is currently not feasible. Choose ONE option only
-    #   - This param can also be omitted from _search_params if you do not wish to define any value
-    # print('"' * 40)
-    # print(f" {query}")
-    # print('"' * 40)
-    # _search_params = {
-    #     "q": "une photo montrant " + query,
-    #     "num": num_imgs,
-    #     "fileType": "png",
-    #     #'rights': 'cc_publicdomain|cc_attribute|cc_sharealike|cc_noncommercial|cc_nonderived',
-    #     "safe": "active",  ## |high|medium|off|safeUndefined
-    #     "imgType": "photo",  ## 'clipart|face|lineart|stock|photo|animated|imgTypeUndefined
-    #     "lang": "fr",
-    #     "imgSize": "medium",  ## |small|xlarge|xxlarge|imgSizeUndefined
-    #     #'imgDominantColor': '', ##black|blue|brown|gray|green|orange|pink|purple|red|teal|white|yellow|imgDominantColorUndefined
-    #     #'imgColorType': 'color|gray|mono|trans|imgColorTypeUndefined' ##
-    # }
+def get_image_url(query: str) -> str:
+    params = parse.urlencode(
+        {
+            "q": query,
+            "api_key": st.secrets["api_key"],
+            "lang": "fr",
+            "limit": "2",
+            "rating": "g",
+        }
+    )
 
-    # # this will search, download and resize:
-    # GIS_API.search(
-    #     search_params=_search_params, width=250, height=500
-    # )  # path_to_dir='/path/'
-
-    # results = [image.url for image in GIS_API.results()]
-    # # assert(len(results)==num_imgs),f"Retrieved {len(results)} is different form {num_imgs}"
-    # return results
-    
-    params = parse.urlencode({
-    "q": query,
-    "api_key": st.secrets['api_key'],
-    "limit": "2"
-    })
-
-    with request.urlopen("".join((url, "?", params))) as response:
+    with request.urlopen("".join((URL_API, "?", params))) as response:
         data = json.loads(response.read())
-        url_ = data['data'][0]['images']['original']['url']
-    return url_.split('?')[0]
+        try:
+            url = data["data"][0]["images"]["original"]["url"]
+        except IndexError:
+            url = "https://media.giphy.com/media/14uQ3cOFteDaU/giphy.gif"
+    return url.split("?")[0]
 
 
-def write_question():
+def write_question() -> Iterable:
     """
     Selects a random question and displays it in the Streamlit app along with a multiple-choice question.
 
@@ -122,7 +66,7 @@ def write_question():
     query = selected_fr
 
     # Set up the Google Images API
-    urls = get_image_urls(query)
+    urls = get_image_url(query)
     print(urls)
     propositions = [
         selected_bassa,
@@ -132,80 +76,56 @@ def write_question():
     return urls, correct_, selected_fr, propositions
 
 
-# @st.cache_data
-# def get_images(img_urls):
-#     imgs_ = []
-#     for url in img_urls:
-#         try:
-#             imgs_.append(Image.open(BytesIO(requests.get(url).content)))
-#         except UnidentifiedImageError:
-#             imgs_.append(
-#                 Image.open(
-#                     BytesIO(
-#                         requests.get(
-#                             "https://data.pixiz.com/output/user/frame/preview/400x400/7/8/0/3/1863087_a0870.jpg"
-#                         ).content
-#                     )
-#                 )
-#             )
-#     return imgs_
+def display_question(
+    img_url: str, correct: str, traduction: str, choices: Iterable[str]
+) -> Any:
+    if not (
+        img_url is None or correct is None or traduction is None or choices is None
+    ):
+        st.title(traduction)
+        col1, col2 = st.columns(2)
 
+        gif_tag = f'<img src="{img_url}" alt="GIF" width="300" height="200">'
 
-def display_question(img_url, correct, traduction, choices, container=st):
-    print(img_url, correct, traduction, choices)
-    if img_url == None or correct == None or traduction == None or choices == None:
-        return
+        # Show the GIF in the Streamlit app using st.markdown
+        col1.markdown(gif_tag, unsafe_allow_html=True)
+        # col1.markdown(f"![Alt Text]({img_url})")
 
-    st.title(traduction)
-    st.markdown(f"![Alt Text]({img_url})")
- 
-    # mygrid = [[], []]
-    # with st.container():
-    #     mygrid[0] = st.columns(2)
-    # with st.container():
-    #     mygrid[1] = st.columns(2)
-    # Display the images in a 4 image one word style
-    # imgs = get_images(tuple(img_urls))
-    # for i in range(2):
-    #     for j in range(2):
-    #         with mygrid[i][j]:
-    #             try:
-    #                 st.image(imgs[i * 2 + j], width=150)
-    #             except IndexError:
-    #                 pass
+        with col2:
+            # Display the question and radio buttons
+            answer = st.radio(
+                f"Quelle est la traduction correcte pour : {traduction} ?",
+                choices,
+            )
 
-    # Display the question and radio buttons
-    answer = st.radio(
-        f"Quelle est la traduction correcte pour : {traduction} ?", choices
-    )
+            style = """
+                <style>
+                    div[data-baseweb="radio"] label {
+                        font-size: 50px !important;
+                    }
+                            body {
+                    font-size: 70px;
+                }
 
-    style = """
-        <style>
-            div[data-baseweb="radio"] label {
-                font-size: 20px !important;
-            }
-                    body {
-            font-size: 50px;
-        }
+                </style>
+            """
 
-        </style>
-    """
-
-    st.markdown(style, unsafe_allow_html=True)
-    # Check if the answer is correct and display a message
-    submit = st.button("Soumettre")
-    if submit:
-        if answer == correct:
-            st.write("Correct!")
-        else:
-            st.write(f"Faux. La bonne réponse est [{correct}].")
-
-    # if st.button('Prochaine Question'):
-    #     write_question()
+            st.markdown(style, unsafe_allow_html=True)
+            # Check if the answer is correct and display a message
+            submit = st.button("Valider")
+            if submit:
+                if answer == correct:
+                    st.write(
+                        '<p style="color:green; font-size: 40px;">Correct!</p>',
+                        unsafe_allow_html=True,
+                    )
+                    st.write("Correct!")
+                else:
+                    st.write(f"Faux. La bonne réponse est [{correct}].")
 
 
 # Define the Streamlit app
-def main():
+def main() -> None:
     # # Set page header
     # container = st.container()
 
@@ -229,24 +149,22 @@ def main():
     if "answer_choices" not in st.session_state:
         st.session_state.answer_choices = None
 
-
-    # image_urls,correct_answer,correct_question,answer_choices = None,None,None,None
-    display_question(
-        st.session_state.image_urls,
-        st.session_state.correct_answer,
-        st.session_state.correct_question,
-        st.session_state.answer_choices,
-    )
-
-    if st.button("Nouvelle question"):
+    nextq = st.button("Nouvelle question")
+    if nextq:
         (
             st.session_state.image_urls,
             st.session_state.correct_answer,
             st.session_state.correct_question,
             st.session_state.answer_choices,
         ) = write_question()
+        print(st.session_state.image_urls)
 
-    # display_question(image_urls,correct_answer,correct_question,answer_choices)
+    display_question(
+        st.session_state.image_urls,
+        st.session_state.correct_answer,
+        st.session_state.correct_question,
+        st.session_state.answer_choices,
+    )
 
 
 # Run the Streamlit app
