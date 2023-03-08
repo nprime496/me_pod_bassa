@@ -1,3 +1,4 @@
 env/*
 .*
 !.gitignore
+!.streamlit/config.toml
