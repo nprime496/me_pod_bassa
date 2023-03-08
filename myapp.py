@@ -113,9 +113,11 @@ def display_question(
 
             gif_tag = f'<img src="{img_url}" alt="GIF" width="300" height="200">'
 
-            # Show the GIF in the Streamlit app using st.markdown
-            col1.markdown(gif_tag, unsafe_allow_html=True)
-            # col1.markdown(f"![Alt Text]({img_url})")
+            with col1:
+                # Show the GIF in the Streamlit app using st.markdown
+                col1.markdown(gif_tag, unsafe_allow_html=True)
+                # col1.markdown(f"![Alt Text]({img_url})")
+                result = st.empty()
 
             with col2:
                 # Display the question and radio buttons
@@ -143,17 +145,18 @@ def display_question(
                     f'Valider la traduction de "{traduction}"'
                 )  # Very Important not to have duplicates
                 if submit:
-                    if answer == correct:
-                        st.write(
-                            '<p style="color:green; font-size: 40px;">Correct!</p>',
-                            unsafe_allow_html=True,
-                        )
-                        # st.write("Correct!")
-                    else:
-                        st.write(
-                            f'<span style="color:red; font-size: 25px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 20px;">{correct}.</span>',
-                            unsafe_allow_html=True,
-                        )
+                    with result:
+                        if answer == correct:
+                            st.write(
+                                f'<p style="color:green; font-style:bold; font-size: 50px;">{correct}</p>',
+                                unsafe_allow_html=True,
+                            )
+                            # st.write("Correct!")
+                        else:
+                            st.write(
+                                f'<span style="color:red; font-size: 25px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 20px;">{correct}.</span>',
+                                unsafe_allow_html=True,
+                            )
         return container
 
 
