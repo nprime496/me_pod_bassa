@@ -186,6 +186,7 @@ def main() -> None:
         st.session_state.answer_choices = None
 
     question = st.empty()
+    current_q = None
     with question:
         display_question(
             st.session_state.image_urls,
@@ -205,14 +206,15 @@ def main() -> None:
             st.session_state.correct_question,
             st.session_state.answer_choices,
         ) = write_question()
-        question.empty()
-        with question:
-            display_question(
-                st.session_state.image_urls,
-                st.session_state.correct_answer,
-                st.session_state.correct_question,
-                st.session_state.answer_choices,
-            )
+        # question.empty()
+        st.experimental_rerun()
+        # with question:
+        #     display_question(
+        #         st.session_state.image_urls,
+        #         st.session_state.correct_answer,
+        #         st.session_state.correct_question,
+        #         st.session_state.answer_choices,
+        #     )
 
 
 # Run the Streamlit app
