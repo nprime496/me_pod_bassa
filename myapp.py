@@ -154,7 +154,7 @@ def display_question(
                             # st.write("Correct!")
                         else:
                             st.write(
-                                f'<span style="color:red; font-size: 25px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 20px;">{correct}.</span>',
+                                f'<span style="color:red; font-size: 20px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 25px;">{correct}.</span>',
                                 unsafe_allow_html=True,
                             )
         return container
