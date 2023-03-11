@@ -21,9 +21,13 @@ def read_csv(filename: str) -> pd.DataFrame:
 
 # Set up the Giphy API endpoint URL and API key
 URL_API = "http://api.giphy.com/v1/gifs/search"
-DATABASE_FILE = "data/db.csv"
+DATABASE_WORDS = "data/db.csv"
 
-DATABASE = read_csv(DATABASE_FILE)
+DATABASE_SENTENCES = "data/dbs3.csv"
+
+DATABASE = read_csv(DATABASE_WORDS)
+
+DATABASE_ILLUSTRATIONS = read_csv(DATABASE_SENTENCES)
 
 
 # Define a function to retrieve the image urls for a given query
@@ -86,6 +90,20 @@ def write_question() -> Iterable:
     # Define the correct answer to the MCQ
     correct_ = selected_bassa
 
+    sentences = DATABASE_ILLUSTRATIONS[
+        DATABASE_ILLUSTRATIONS["bassa"]
+        .str.lower()
+        .str.split(expand=True)
+        .isin([selected_bassa])
+        .any(1)
+    ]
+
+    illustrations = None
+    if len(sentences) > 0:
+        sentence_illustration = sentences.sample()
+        selected_sentence_bassa = sentence_illustration["bassa"].values[0]
+        selected_sentence_fr = sentence_illustration["french"].values[0]
+        illustrations = [selected_sentence_fr, selected_sentence_bassa]
     # Test the function
     query = selected_fr
 
@@ -96,11 +114,21 @@ def write_question() -> Iterable:
         *random.sample(set(DATABASE["bassa"]) - {selected_bassa}, 3),
     ]
     random.shuffle(propositions)
-    return urls, correct_, selected_fr, propositions
+    return (
+        urls,
+        correct_,
+        selected_fr,
+        propositions,
+        illustrations,
+    )
 
 
 def display_question(
-    img_url: str, correct: str, traduction: str, choices: Iterable[str]
+    img_url: str,
+    correct: str,
+    traduction: str,
+    choices: Iterable[str],
+    sentences: list = None,
 ) -> Any:
     global widget_id
     if not (
@@ -111,7 +139,7 @@ def display_question(
             st.title(traduction)
             col1, col2 = st.columns(2)
 
-            gif_tag = f'<img src="{img_url}" alt="GIF" width="300" height="200">'
+            gif_tag = f'<img src="{img_url}" alt="GIF" width="250" height="150">'
 
             with col1:
                 # Show the GIF in the Streamlit app using st.markdown
@@ -142,21 +170,29 @@ def display_question(
                 # st.markdown(style, unsafe_allow_html=True)
                 # Check if the answer is correct and display a message
                 submit = st.button(
-                    f'Valider la traduction de "{traduction}"'
+                    "Valider"  # la traduction de "{traduction}"'
                 )  # Very Important not to have duplicates
                 if submit:
                     with result:
                         if answer == correct:
-                            st.write(
-                                f'<p style="color:green; font-style:bold; font-size: 50px;">{correct}</p>',
-                                unsafe_allow_html=True,
-                            )
+                            # st.write(
+                            text = f'<span style="color:green; font-style:bold; font-size: 50px;">{correct}</span>'  # ,
+                            # unsafe_allow_html=True,
+
                             # st.write("Correct!")
                         else:
+                            # st.write(
+                            text = f'<span style="color:red; font-size: 20px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 25px;">{correct}.</span>'  # ,
+                            # unsafe_allow_html=True,
+                            # )
+                        if sentences:
+                            assert len(sentences) == 2
                             st.write(
-                                f'<span style="color:red; font-size: 20px;">{random.choice(["Raté","Faux","Perdu","Dommage","Zut"])}!</span> <span style="color:black; font-size: 20px;">La bonne réponse est </span><span style="color:green; font-size: 25px;">{correct}.</span>',
+                                f'{text}<br><br><span style="color:black; font-size: 20px;">{sentences[0]}\n</span> <br><br><span style="color:green; font-size: 20px;">{sentences[1]}</span>',
                                 unsafe_allow_html=True,
                             )
+                        else:
+                            st.write(text, unsafe_allow_html=True)
         return container
 
 
@@ -184,15 +220,17 @@ def main() -> None:
         st.session_state.correct_question = None
     if "answer_choices" not in st.session_state:
         st.session_state.answer_choices = None
+    if "illustration" not in st.session_state:
+        st.session_state.illustration = None
 
     question = st.empty()
-    current_q = None
     with question:
         display_question(
             st.session_state.image_urls,
             st.session_state.correct_answer,
             st.session_state.correct_question,
             st.session_state.answer_choices,
+            st.session_state.illustration,
         )
 
     _, col2 = st.columns(2)
@@ -205,6 +243,7 @@ def main() -> None:
             st.session_state.correct_answer,
             st.session_state.correct_question,
             st.session_state.answer_choices,
+            st.session_state.illustration,
         ) = write_question()
         # question.empty()
         st.experimental_rerun()
