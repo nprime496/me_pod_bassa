@@ -11,6 +11,10 @@ import streamlit as st
 #                    page_icon=":books:",
 #                    layout="wide")
 
+# Set up the Giphy API endpoint URL and API key
+URL_API = "http://api.giphy.com/v1/gifs/search"
+DATABASE_WORDS = "data/db.csv"
+
 widget_id = (id for id in range(1, 100_00))
 
 
@@ -18,10 +22,6 @@ widget_id = (id for id in range(1, 100_00))
 def read_csv(filename: str) -> pd.DataFrame:
     return pd.read_csv(filename)
 
-
-# Set up the Giphy API endpoint URL and API key
-URL_API = "http://api.giphy.com/v1/gifs/search"
-DATABASE_WORDS = "data/db.csv"
 
 DATABASE_SENTENCES = "data/dbs3.csv"
 
@@ -69,7 +69,7 @@ def get_image_url(query: str) -> str:
     with request.urlopen("".join((URL_API, "?", params))) as response:
         data = json.loads(response.read())
         try:
-            url = data["data"][0]["images"]["original"]["url"]
+            url = data["data"][0]["images"]["original_still"]["url"]  # original
         except IndexError:
             url = "https://media.giphy.com/media/14uQ3cOFteDaU/giphy.gif"
     return url.split("?")[0]
